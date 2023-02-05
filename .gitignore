@@ -1,0 +1,7 @@
+nanogen.V.Arduino/build/**
+nanogen.V.Arduino/.vscode/**
+nanogen.V.ESP/build/**
+nanogen.V.ESP/.vscode/**
+history/**
+.git/**
+etc/**
