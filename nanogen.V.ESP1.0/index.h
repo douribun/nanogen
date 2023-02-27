@@ -17,7 +17,7 @@ const char INDEX_HEAD[] PROGMEM = R"=====(
       height: 0; 
       overflow: hidden; 
       z-index:-1;
-      content:url('/toggle_air.png') url('/toggle_gas.png') url('/cirbtn_off.png') url('/cirbtn_on.png') url('/cirbtn_check.png') url('/cirbtn_warm.png');
+      content:url('/toggle_air.png') url('/toggle_gas.png') url('/cirbtn_off.png') url('/cirbtn_on.png');
     }
     h2 {color: #F8F4F4; margin: 5.0rem auto 3.0rem; text-decoration: underline;}
     h3 {color: #E6D00A;}
