@@ -33,14 +33,14 @@ void setup(){  //=============================================
   EEPROM.begin(130); 
   Serial.begin(115200);
   handleFile();
-
+  /*
   pinMode(LED_BUILTIN, OUTPUT);
   #ifdef ESP8266
     digitalWrite(LED_BUILTIN, HIGH);
   #else
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(LED_BUILTIN, LOW); //ESP32는 ESP8266과 on/off 바뀌어 있다.
   #endif  
-
+  */
   relayInit();
 
   //start------------------------------------------------------    

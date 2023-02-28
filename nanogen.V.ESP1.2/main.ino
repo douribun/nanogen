@@ -1,6 +1,6 @@
 void connectAP(){
   WiFi.disconnect();
-  //WiFi.mode(WIFI_AP);
+  WiFi.mode(WIFI_AP);
   delay(10);
   WiFi.softAP(mngConf.mcuID, mngConf.apPASS);
   //Serial.printf("스마트폰 'WiFi/사용 가능한 네트워크'에서 %s를 비번 %s로 연결하세요!\n", mngConf.mcuID, mngConf.apPASS);
@@ -11,16 +11,16 @@ void connectSTA(){
   IPAddress GATEWAY;
   IPAddress SUBNET;
   if (String(mngConf.netID).length() > 0 && String(mngConf.netPASS).length() > 0){
-    //WiFi.mode(WIFI_STA);
-    //Serial.printf("Connecting WiFi... netIP: %s, netGateWay: %s, netSubNet: %s", mngConf.netIP, mngConf.netGATEWAY, mngConf.netSUBNET);
+    WiFi.mode(WIFI_STA);
+    Serial.printf("Connecting WiFi... netIP: %s, netGateWay: %s, netSubNet: %s", mngConf.netIP, mngConf.netGATEWAY, mngConf.netSUBNET);
     IP.fromString(String(mngConf.netIP));
     GATEWAY.fromString(String(mngConf.netGATEWAY));
     SUBNET.fromString(String(mngConf.netSUBNET));
-    //Serial.print("IP: "+ IpAddressToString(IP)); //Serial.print(", GATEWAY" + IpAddressToString(GATEWAY)); //Serial.println(", SUBNET" + IpAddressToString(SUBNET));
+    //Serial.printf("IP: %s, GATEWAY: %s, SUBNET: %s", String(IP), String(GATEWAY), String(SUBNET));
 
     WiFi.config(IP, GATEWAY, SUBNET);
     WiFi.begin(mngConf.netID, mngConf.netPASS);
-    //Serial.printf("Connecting WiFi..., read netID: %s, netPASS: %s", mngConf.netID, mngConf.netPASS);  
+    Serial.printf("Connecting WiFi..., read netID: %s, netPASS: %s", mngConf.netID, mngConf.netPASS);  
     int count = 0;
     while ((WiFi.status() != WL_CONNECTED) && count < 20) {
       delay(500);

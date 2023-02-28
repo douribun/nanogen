@@ -134,7 +134,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
         mngState.req = mngState.web2mcu[4]-'0';
         //Serial.printf("Rcvd: %d%d", mngState.mod, mngState.req);
         state2nx();
-        //state2web();
+        state2web();
         relayControl();
       }
       break;

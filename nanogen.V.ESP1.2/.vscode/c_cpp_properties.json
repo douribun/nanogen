@@ -19,7 +19,7 @@
             "includePath": [
                 "/home/jus/.arduino15/packages/esp8266/hardware/esp8266/3.1.1/tools/sdk/include",
                 "/home/jus/.arduino15/packages/esp8266/hardware/esp8266/3.1.1/tools/sdk/lwip2/include",
-                "/tmp/arduino/sketch-F0A7EF8339733816D859A34EBBC293A8/core",
+                "/tmp/arduino/sketch-4A4AB17D5AFA886E8327BED3F3A01A48/core",
                 "/home/jus/.arduino15/packages/esp8266/hardware/esp8266/3.1.1/cores/esp8266",
                 "/home/jus/.arduino15/packages/esp8266/hardware/esp8266/3.1.1/variants/nodemcu",
                 "/home/jus/.arduino15/packages/esp8266/hardware/esp8266/3.1.1/libraries/ESP8266WiFi/src",

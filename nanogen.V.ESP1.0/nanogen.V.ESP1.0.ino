@@ -36,7 +36,7 @@ const int relayNo=3;
 #ifdef ESP8266
   const byte relayCh[relayNo]    = {D5, D6, D7};    //{D5, D6, D8}/D7 no, before{D2, D5, D6} //되도록 0(D3),2(D4),15(D8)은 사용하지 마라)-------------------------
 #else
-  const byte LED_BUILTIN         = 2;
+  //const byte LED_BUILTIN         = 2;
   const byte relayCh[relayNo]    = {21, 19, 18};    //{21, 19, 18} before{25, 26, 27}
 #endif
 const int waterPump=0;

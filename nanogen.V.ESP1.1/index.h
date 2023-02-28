@@ -19,7 +19,7 @@ const char INDEX_HEAD[] PROGMEM = R"=====(
     height: 0; 
     overflow: hidden; 
     z-index:-1;
-    content:url('/toggle_air.png') url('/toggle_gas.png') url('/cirbtn_off.png') url('/cirbtn_on.png');
+    content:url('toggle_air.png') url('toggle_gas.png') url('cirbtn_off.png') url('cirbtn_on.png');
   }
   .modBtn{
     width: 70px;
@@ -27,7 +27,7 @@ const char INDEX_HEAD[] PROGMEM = R"=====(
     border: none;
     border-radius:0%;
     font-size: 0rem;
-    background: url('/toggle_air.png') no-repeat;
+    background: url('toggle_air.png') no-repeat;
     cursor: pointer;
   }
   .thingsBtn{
@@ -39,7 +39,7 @@ const char INDEX_HEAD[] PROGMEM = R"=====(
     font-size: 0rem;
     padding: 2.0rem 2.0rem;
     margin: 1.0rem auto;
-    background: url('/cirbtn_off.png') no-repeat;
+    background: url('cirbtn_off.png') no-repeat;
     cursor: pointer;
   }
 
@@ -100,6 +100,7 @@ const char INDEX_HEAD[] PROGMEM = R"=====(
   }
   </style>
   <title>IEUM IoT</title>
+  <link rel="icon" type="image/x-icon" href="favicon-ieum.ico">
   </head>
   <body>
   <h1 style='color:#cbf1b1' align: center><b>NANO BUBBLE GENERATOR</b></h1>
@@ -181,28 +182,28 @@ const char BODY_CONFIG2[] PROGMEM = R"=====(
       //console.log('set initialization on socket open');
     }    
     function onClose(evt){
-      if (event.wasClean) {
+      if (evt.wasClean) {
       } else {
         console.log('disconnection!');
         setTimeout(init, 2000);
       }
     }
     function selectGas(){
-      mbtnID.style.backgroundImage = 'url(\'/toggle_gas.png\')';
+      mbtnID.style.backgroundImage = 'url(\'toggle_gas.png\')';
       mbtnID.value = 'AIR';
     }
     function selectAir(){
-      mbtnID.style.backgroundImage = 'url(\'/toggle_air.png\')';
+      mbtnID.style.backgroundImage = 'url(\'toggle_air.png\')';
       mbtnID.value = 'GAS';
     }
     function selectOn(){
       mbtnID.disabled = true;
-      tbtnID.style.backgroundImage = 'url(\'/cirbtn_on.png\')';
+      tbtnID.style.backgroundImage = 'url(\'cirbtn_on.png\')';
       tbtnID.value = 'OFF';
     }
     function selectOff(){
       mbtnID.disabled = false;
-      tbtnID.style.backgroundImage = 'url(\'/cirbtn_off.png\')';
+      tbtnID.style.backgroundImage = 'url(\'cirbtn_off.png\')';
       tbtnID.value = 'ON';
     }
     function modClick(){

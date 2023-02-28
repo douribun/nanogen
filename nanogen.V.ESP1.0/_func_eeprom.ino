@@ -27,7 +27,7 @@ void readEEPROM(){
   //Serial.printf("READ EEPROM(ap inform): %s/%d\n", mngConf.apPASS, strlen(mngConf.apPASS));
   //Serial.printf("READ EEPROM(sta inform): %s/%d, %s/%d, %s/%d, %s/%d, %s/%d\n", mngConf.netID, strlen(mngConf.netID), mngConf.netIP, strlen(mngConf.netIP), mngConf.netGATEWAY, strlen(mngConf.netGATEWAY), mngConf.netSUBNET, strlen(mngConf.netSUBNET), mngConf.netPASS, strlen(mngConf.netPASS));
 }
-
+/*
 void blinking(){
   for (int i = 0; i < 5; i++){
     digitalWrite(LED_BUILTIN, LOW);
@@ -36,12 +36,12 @@ void blinking(){
     delay(500);
   }
 }
-
+*/
 void clearROM(int pos, int end){
   for (int i = pos; i < end; i++){
     EEPROM.write(i, 0);
   }
-  blinking();
+  //blinking();
   EEPROM.commit();
   readEEPROM();
 }

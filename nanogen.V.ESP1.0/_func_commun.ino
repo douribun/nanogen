@@ -19,11 +19,11 @@ void relayInit(){
 
 void relayControl(){  
   if(mngState.req==1){
-    digitalWrite(relayCh[waterPump], LOW);
+    digitalWrite(relayCh[waterPump], HIGH);  //ESP32는 HIGH, ESP8266 LOW
     if(mngState.mod==0){
-      digitalWrite(relayCh[airPump], LOW);
+      digitalWrite(relayCh[airPump], HIGH);
     }else{
-      digitalWrite(relayCh[solenoid], LOW);
+      digitalWrite(relayCh[solenoid], HIGH);
     }
   }else if(mngState.req==0){
     for(int i=0;i<relayNo;i++){
@@ -134,7 +134,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
         mngState.req = mngState.web2mcu[4]-'0';
         //Serial.printf("Rcvd: %d%d", mngState.mod, mngState.req);
         state2nx();
-        //state2web();
+        state2web();    //web to web
         relayControl();
       }
       break;

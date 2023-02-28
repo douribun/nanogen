@@ -30,7 +30,7 @@ void relayControl(){
       digitalWrite(relayCh[i], HIGH);
     }    
   }
-  //relayState();
+  //checkRelay();
 }
 
 //communicate with Nextion=======================================================
@@ -71,9 +71,9 @@ void state2web(){
   Serial.flush();
 }
 //from Web------------------------------------------------
-void parseWeb(){
+void parseWeb(String web2mcu){
   StaticJsonDocument<256> doc;
-  DeserializationError error = deserializeJson(doc, "Not Json data!!!");
+  DeserializationError error = deserializeJson(doc, web2mcu);
   if (error){
     //Serial.printf("deSerializeJson() failed: %s", error.f_str());
     return;
@@ -129,13 +129,13 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
     case WStype_TEXT:{
       String web2mcu = String((char *)&payload[0]);
       if (web2mcu.startsWith("{") && web2mcu.endsWith("}")) {
-        parseWeb();
+        parseWeb(web2mcu);
       }else if(web2mcu[2]=='C'){
         mngState.mod = web2mcu[3]-'0';
         mngState.req = web2mcu[4]-'0';
         //Serial.printf("Rcvd: %d%d", mngState.mod, mngState.req);
         state2nx();
-        //state2web();
+        state2web();  //for web to web
         relayControl();
       }
       break;

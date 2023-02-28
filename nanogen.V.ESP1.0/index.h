@@ -177,7 +177,7 @@ const char BODY_CONFIG2[] PROGMEM = R"=====(
       //console.log("set initialization on socket open");
     }    
     function onClose(evt){
-      if (event.wasClean) {
+      if (evt.wasClean) {
       } else {
         console.log('disconnection!')
       }
