@@ -1,0 +1,91 @@
+body{
+  margin-left: auto; margin-right: auto;
+  line-height: 2.5rem;
+  text-align: center;
+  background-color: #383847;
+}
+body::after{
+  position: absolute; 
+  width: 0; 
+  height: 0; 
+  overflow: hidden; 
+  z-index:-1;
+  content:url('toggle_air.png') url('toggle_gas.png') url('cirbtn_off.png') url('cirbtn_on.png');
+}
+.modBtn{
+  width: 70px;
+  height: 35px;
+  border: none;
+  border-radius:0%;
+  font-size: 0rem;
+  background: url('toggle_air.png') no-repeat;
+  cursor: pointer;
+}
+.thingsBtn{
+  width: 120px;
+  height: 120px;
+  border: none;
+  border-radius:70%;
+  box-shadow: 0.0rem 0.0rem 0.3rem 0.3rem #063BDF;
+  font-size: 0rem;
+  padding: 2.0rem 2.0rem;
+  margin: 1.0rem auto;
+  background: url('cirbtn_off.png') no-repeat;
+  cursor: pointer;
+}
+
+.transit{
+  height: 2.0rem;
+  width: 15rem;
+  border: 0;  
+  font-size: 0.9rem;
+  text-align: center;
+  color: #0e96f0;
+  background-color: #19446865;
+}
+.transit:active,
+.transit:hover{
+  color: #e0e7e5;
+  cursor: pointer;
+}
+
+input, select, .inputW{
+  float:none;
+  display: inline-block;
+  width: 15rem;
+  height: 1.7rem;    
+  vertical-align: middle;
+  text-align: left;  
+  font: 0.8rem verdana;
+  color: #3f3131;
+  background-color: #c4bbbb;
+  resize: vertical;
+}
+select{
+  width: 15.5rem;
+  height: 2.0rem;
+}
+input::placeholder{
+  color: #3f3131;
+}
+
+button{
+  display: inline-block;
+  height: 2.5rem;
+  width: 7rem;
+  border: 0;
+  line-height: 2.5rem;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: #867676;
+  text-shadow: 1px 1px 1px #000;
+  border-radius: 7%;
+  background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+  box-shadow: inset 0.5px 0.5px 1.0px rgba(255, 255, 255, 0.6), inset -0.5px -0.5px 1.0px rgba(0, 0, 0, 0.6);
+}
+button:active,
+button:hover{
+  color: #e0e7e5;
+  cursor: pointer;
+}

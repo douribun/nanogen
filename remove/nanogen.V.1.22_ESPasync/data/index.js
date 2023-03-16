@@ -1,0 +1,204 @@
+let ws;
+let gateWay = 'ws://' + window.location.hostname + '/ws'; 
+let mbtnID = document.getElementById('modBTN');
+let tbtnID = document.getElementById('thingsBTN');
+let divOper = document.getElementById('operDiv');
+let divPass = document.getElementById('passDiv');    
+let divNet = document.getElementById('netDiv');
+let selWiFi = document.getElementById('selNet');
+//let wifiList = [];
+let sendTXT = '52C';
+let selectMod = '0';
+let selectReq = '0';
+
+function init(){
+  ws = new WebSocket(gateWay);
+  ws.onopen = onOpen;
+  ws.onclose = onClose;
+  ws.onmessage = onMessage;
+  ws.onerror = onError;
+}
+function onOpen(evt){
+  //console.log('set initialization on socket open');
+}    
+function onClose(evt){
+  if (evt.wasClean) {
+  } else {
+    console.log('disconnection!');
+    setTimeout(init, 2000);
+  }
+}
+function selectGas(){
+  mbtnID.style.backgroundImage = 'url(\'toggle_gas.png\')';
+  mbtnID.value = 'AIR';
+}
+function selectAir(){
+  mbtnID.style.backgroundImage = 'url(\'toggle_air.png\')';
+  mbtnID.value = 'GAS';
+}
+function selectOn(){
+  mbtnID.disabled = true;
+  tbtnID.style.backgroundImage = 'url(\'cirbtn_on.png\')';
+  tbtnID.value = 'OFF';
+}
+function selectOff(){
+  mbtnID.disabled = false;
+  tbtnID.style.backgroundImage = 'url(\'cirbtn_off.png\')';
+  tbtnID.value = 'ON';
+}
+function modClick(){
+  let mbtnText = mbtnID.value;
+  if(mbtnText ==='GAS'){
+    selectMod = '1';
+    selectGas();
+  }else{
+    selectMod = '0';
+    selectAir();
+  }
+}
+function thingsClick(){
+  let pbtnID = document.getElementById('passBTN');
+  let nbtnID = document.getElementById('netBTN');
+  let tbtnText = tbtnID.value;
+  if(tbtnText ==='ON'){
+    selectReq = '1';
+    selectOn();
+    pbtnID.style.display = 'none';
+    nbtnID.style.display = 'none';
+  }else{
+    selectReq = '0';
+    selectOff();
+    pbtnID.style.display = 'block';
+    nbtnID.style.display = 'block';
+  }
+  sendBtnMsg();
+}
+function sendBtnMsg(){
+  sendTXT += selectMod;
+  sendTXT += selectReq;
+  sendTXT += ';';
+  ws.send(sendTXT);
+  //console.log('web send msg: ', sendTXT);
+  sendTXT = '52C';
+}
+
+function onMessage(evt){
+  let rcvObj = JSON.parse(evt.data);  //the text format with websocket is UTF-8.
+  console.log('rcvd msg from MCU: ', rcvObj);
+  if(rcvObj.MOD == 0){
+    selectMod = '0';
+    selectAir();
+  }else if(rcvObj.MOD == 1){
+    selectMod = '1';
+    selectGas();
+  }
+  if(rcvObj.REQ == 0){
+    selectReq = '0';
+    selectOff();
+  }else if(rcvObj.REQ == 1){
+    selectReq = '1';
+    selectOn();
+  }
+  if(rcvObj.SSID){
+    let len = rcvObj.SSID.length;
+    //console.log('rcvObj length: (' + len + ')');
+    if(selWiFi.children.length == 1){      
+      for (var i = 0; i < len; i++) {
+        let opt = document.createElement('option');
+        //console.log(rcvObj.SSID[i]);
+        opt.setAttribute('value', rcvObj.SSID[i]);
+        opt.text = rcvObj.SSID[i];
+        selWiFi.options.add(opt);
+      }
+    }
+  }
+}
+function onError(evt){
+  console.log('error message!')
+}
+
+function passShow(){
+  divNet.style.display = 'none';
+  if(divPass.style.display=='none'){
+    divOper.style.display = 'none';
+    divPass.style.display = 'block';
+  }else{
+    divOper.style.display = 'block';
+    divPass.style.display = 'none';
+  }
+}
+
+async function netShow(){
+  ws.send('WiFiscan');
+  divPass.style.display = 'none';
+  if(divNet.style.display=='none'){
+    divOper.style.display = 'none';    
+    divNet.style.display = 'block';
+  }else{
+    divOper.style.display = 'block';
+    divNet.style.display = 'none';
+  }
+}
+
+function validatePASS(pass_txt, id_input){
+  var pwformat = /^[0-9]{8,11}$/;
+  if(pwformat.test(pass_txt)==true){
+    return false;
+  } else {
+    alert('**keep the password format.\nEnter only number, no more than 4~11 digits.');
+    document.getElementById(id_input).value = '';
+    document.getElementById(id_input).focus();
+    return true;
+  }
+}
+
+function validateIP(ip_addr, iput_id){
+  let ipformat = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+  if(ipformat.test(ip_addr)==true){
+    return false;
+  }else{
+    alert('**You have entered an invalid IP address!');
+    document.getElementById(iput_id).value = '';
+    document.getElementById(iput_id).focus();
+    return true;
+  }
+}
+
+document.forms.apform.onsubmit = function(){
+  let ApInfo = {};
+  ApInfo['ApPass'] = this.ApPass.value;
+  //console.log(JSON.stringify(ApInfo));
+  ws.send(JSON.stringify(ApInfo));
+  setTimeout(function(){
+    alert('After reboot, Your AP Password was changed.');
+  }, 500);
+  divOper.style.display = 'block';
+  divPass.style.display = 'none';
+  return false;
+}
+
+document.forms.staForm.onsubmit = function(){
+  let NetInfo = {};
+  NetInfo['NetId'] = this.NetId.value;
+  NetInfo['NetIp'] = this.NetIp.value;
+  NetInfo['NetGateWay'] = this.NetGateWay.value;
+  NetInfo['NetSubNet'] = this.NetSubNet.value;
+  NetInfo['NetPass'] = this.NetPass.value;
+  //console.log(JSON.stringify(NetInfo));
+  ws.send(JSON.stringify(NetInfo));
+  alert('After reboot, Connect the IP: ' + NetInfo['NetIp'] + ' on network \'' + NetInfo['NetId'] + '\'.');
+  divOper.style.display = 'block';
+  divNet.style.display = 'none';
+  return false;
+}
+
+function delAPInput(){
+  alert('Delete all AP information inputted. This machine\'ll be rebooted. Please re-connect on AP mode(\'192.168.4.1\') and password(\'00000000\'), after rebooted!');
+  ws.send('apClear');
+}
+function delSTAInput(){
+  alert('Delete all network information inputted. This machine\'ll be rebooted. Please re-connect on AP mode(\'192.168.4.1\') and your AP password, after rebooted!');
+  ws.send('staClear');
+}
+
+window.addEventListener('load', init, false);
