@@ -1,82 +1,84 @@
 //const byte waterPump=D5;const byte airPump=D6;const byte gasPump=D7;
-#define RelayPin {D5, D6, D7, D8}
-#define airOn {"LOW", "LOW", "HIGH", "HIGH"}   //LOW=ON
-#define gasOn {"LOW", "HIGH", "LOW", "HIGH"}
+const byte relayPin[] = {D5, D6, D7, D8};
+byte len = sizeof(relayPin);
+const byte airOn[] = {LOW, LOW, HIGH, HIGH};   //LOW=ON
+const byte gasOn[] = {LOW, HIGH, LOW, HIGH};
 
-typedef struct _CmdData{
-  char buffer[10]={0,};
-  char errorMsg[25];
-  int charLength=0;  
-  byte mod=0;
-  byte req=0;
-} CmdData;
-CmdData getCmd;
-
-//communicate with Relay=======================================================
 class Relay{
 private:
-  byte _pin;
-  byte _state;
+  byte pin;
+  byte turn;
 
 public:
-  Relay(byte _pin){
-    this._pin = _pin;
+  Relay(){
     init();
   }
-
-  void init(){        //void relayInit(){
-    pinMode(_pin, OUTPUT);
-    off();    //Turn off all relay.
-  }
-}
-
-//from Nextion------------------------------------------------
-class NexCmd{
-private:
-  /* data */
-public:
-  void parseNx(){
-    getCmd.charLength = Serial.readBytesUntil(';', getCmd.buffer, 10);
-    //Serial.flush();
-    if(getCmd.buffer[2] == 'C'){
-      getCmd.mod = getCmd.buffer[3] - '0';
-      getCmd.req = getCmd.buffer[4] - '0';
-      //Serial.print(getCmd.mod); Serial.print(getCmd.req);     //for check
-      control(getCmd.mod, getCmd.req);
+  void init(){
+    for(int i=0;i<len;i++){
+      pinMode(relayPin[i], OUTPUT);
+      act(relayPin[i], HIGH);
     }
-    Serial.flush();
+    pinMode(BUILTIN_LED, OUTPUT);    
   }
-  void control(byte _mod, byte _req){
-    if(_req==1){      
-        for(int i=0;i<RelayPinNo;i++){
-          if(_mod==0){
-            digitalWrite(RelayPin[i], airOn[i]);
-          }else if(_mod==1){
-            digitalWrite(RelayPin[i], gasOn[i]);
-          }
-        }
-        digitalWrite(BUILTIN_LED, LOW);  
-    }else{
-      for(int i=0;i<RelayPinNo;i++){
-        digitalWrite(RelayPin[i], HIGH);
-      }
-      digitalWrite(BUILTIN_LED, HIGH);    
+
+  byte state(byte _pin){
+    pin = _pin;
+    return digitalRead(pin);
+  }
+
+  void act(byte _pin, byte _turn){
+    pin = _pin;
+    turn = _turn;
+    if (state(pin) != turn){
+      digitalWrite(pin, turn);
+      digitalWrite(BUILTIN_LED, turn);
     }
   }
 };
 
+class NexCmd{
+  //int charLength;
+  char buffer[10]={0,}; 
+public:
+  int charLength = Serial.readBytesUntil(';', buffer, 10);   
+  byte parseNx(){    
+    Serial.flush();
+    if(buffer[2] == 'C'){
+      return buffer[3] - '0', buffer[4] - '0';
+    }else return 0;
+  }
+};
 
+void control(Relay _rel, byte _mod, byte _req){  
+  if(_req == 1){
+    if(_mod == 0){
+      for(int i=0;i<len;i++){
+        _rel.act(relayPin[i], airOn[i]);
+      }
+    }else if(_mod == 1){
+      for(int i=0;i<len;i++){
+        _rel.act(relayPin[i], gasOn[i]);
+      }
+    }
+  }else{
+    for(int i=0;i<len;i++){
+      _rel.act(relayPin[i], HIGH);
+    }
+  }
+}
+
+NexCmd nex1;
+Relay rel1;
 
 void setup(){  //=============================================
-  Serial.begin(9600);
-  pinMode(BUILTIN_LED, OUTPUT);
-  digitalWrite(BUILTIN_LED, HIGH);
-  Relay.init();
+  Serial.begin(115200);  
+  rel1.init();
 }
 
 void loop(){//==============================================
-  if (Serial.available()) {   //nxSerial
-    //Serial.printf("rcv:%s", getCmd.buffer);
-    NexCmd.parseNx();
+  if (Serial.available()) {      
+    byte mo, re = nex1.parseNx();
+    Serial.printf("Nextion data: mod=%d, req=%d\n", mo, re);
+    control(rel1, mo, re);
   }
 }
